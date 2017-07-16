@@ -2,6 +2,7 @@
 title: "Delete And Successor"
 date: 2017-07-14T17:30:59+08:00
 draft: false
+tags: ["Algorithm"]
 ---
 
 # Problem
