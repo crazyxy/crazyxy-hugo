@@ -56,7 +56,7 @@ instance Applicative ((->)r) where
 
 ## 类型推导
 
-1. Step 1
+- Step 1
 
 ```haskell
 let a = (+) <$> (+3)
@@ -64,7 +64,7 @@ let a = (+) <$> (+3)
 
 `<$>`的类型是infix的`fmap`，因此`<$>`的两个参数类型分别为`(a->b)`和`f a`，结果为`f b`。在上面的表达式中第一个参数的类型为`Num a => a -> a -> a`，可以通过curry，将类型看成`Num a => a->(a->a)`。因此`a`的最终类型是`Num a => (->) a (a -> a)`。
 
-2. Step 2
+- Step 2
 
 ```haskell
 let b = a <*> (*100)
@@ -72,7 +72,7 @@ let b = a <*> (*100)
 
 `<*>`的两边的参数类型分别是`f (a->b)`和`f a`。在`b`中，`<*>`左边表达式的类型是`Num a => (->) a (a->a)`，右边表达式的类型是`Num a => (->) a a`。因此`b`的类型为`Num a => (->) a a`。
 
-3. Step 3
+- Step 3
 
 ```haskell
 let c = b $ 5
