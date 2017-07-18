@@ -27,10 +27,11 @@ instance Functor ((->)r) where
     fmap f g = \r -> f (g r)
 ```
 `(->)r`的`fmap`函数实际上相当于`.`，因为`fmap`的类型为：
+
 ```haskell
 fmap :: (a -> b) -> (r -> a) -> (r -> b)
-
 ```
+
 因此对于`(->)r`Functor，`fmap = .`。`(->)r`的`pure`和`<*>`的实现为：
 
 ```haskell
