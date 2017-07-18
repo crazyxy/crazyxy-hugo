@@ -24,15 +24,43 @@ class (Functor f) => Applicative f where
 
 ```haskell
 instance Functor ((->)r) where
-    fmap f g = \x -> f (g x)
+    fmap f g = \r -> f (g r)
 ```
+`(->)r`的`fmap`函数实际上相当于`.`，因为`fmap`的类型为：
+```haskell
+fmap :: (a -> b) -> (r -> a) -> (r -> b)
 
+```
+因此对于`(->)r`Functor，`fmap = .`。`(->)r`的`pure`和`<*>`的实现为：
 
 ```haskell
-expr = (+) <$> (+3) <*> (*100) $ 5
+instance Applicative ((->)r) where
+    pure x = \_ -> x
+    <*> f g = \r -> f r (g r)
+```
+
+接下来解释下面表达式的求值与类型推导
+```haskell
+(+) <$> (+3) <*> (*100) $ 5
 ```
 
 ## 类型推导
+
+1. Step 1
+
+```haskell
+let a = (+) <$> (+3)
+```
+
+`<$>`的类型是infix的`fmap`，因此`<$>`的两个参数类型分别为`(a->b)`和`f a`，结果为`f b`。在上面的表达式中第一个参数的类型为`Num a => a -> a -> a`，可以通过curry，将类型看成`Num a => a->(a->a)`。因此`a`的最终类型是`Num a => (->) a (a -> a)`。
+
+2. Step 2
+
+```haskell
+let b = a <*> (*100)
+```
+
+`<*>`的两边的参数类型分别是`f (a->b)`和`f a`。在`b`中，`<*>`左边表达式的类型是`Num a => (->) a (a->a)`，右边表达式的类型是`Num a => (->) a`。
 
 
 ## 求值
