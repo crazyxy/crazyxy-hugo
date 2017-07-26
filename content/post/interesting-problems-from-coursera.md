@@ -89,3 +89,16 @@ $dp[i][j]$表示`i`个鸡蛋从`j`层高的楼抛下最坏情况下需要的次�
 $$
 dp[i][j] = min(1+max(dp[i-1][k-1], dp[i][j-k])), \forall k \in [1,i]
 $$
+
+## Shuffling a linked list
+
+链表中有`n`个元素，要求在满足空间复杂度`O(n)`，时间复杂度`O(n logn)`条件下shuffle链表。
+
+Mergesort. 
+```c++
+// 1. a <- shuffled list
+// 2. b <- shuffled list
+// 3. r = random number % (len(a) + len(b))
+// 4. if r < a then choose element from list a else choose element from b
+// 5. go back to 3 until a or b is empty
+```
