@@ -1,0 +1,131 @@
+<body>
+  <!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="" name="keywords">
+<meta content="Coursera - Yan" property="og:title">
+<title>Coursera | Yan</title>
+<link rel="stylesheet" href="https://crazyxy.github.io/css/style.css">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+  <section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://crazyxy.github.io/"><h1 class="title is-4">Yan</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/crazyxy">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="/index.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+  <section class="section">
+    <div class="container">
+      
+      <article>
+        <h2 class="subtitle is-6">July 16, 2017</h2>
+        <h1 class="title"><a href="https://crazyxy.github.io/post/interesting-problems-from-coursera/">Interesting Problems from Coursera</a></h1>
+        
+        <div class="tags">
+    
+        <a class="button is-link" href="/tags/algorithm">Algorithm</a>
+    
+        <a class="button is-link" href="/tags/coursera">Coursera</a>
+    
+</div>
+
+        
+        <div class="content">
+          最近一直在Coursera上学习Princeton University的Algorithms。在学习过程中遇到了很多有趣的问题，在这里记录下来并分享给大家。
+3-SUM $O(n^2)$ 时间复杂度的算法 3-SUM 问题如下，给定一个数组a[N]和x，问数组中存在几组(i,j,k), i&lt;j&lt;k使得a[i]+a[j]+a[k]=x。这道题早在Leetcode上就遇到了，具体的方法如下：
+（为简单起见，假设所有元素均不相同）
+// Step 1: 将数组按照升序排序 // Step 2: 最外层循环一次从0遍历到N // Step 3: 内层循环使用两个指针，分别指向i+1和N-1，问题变成了在一个数组中寻找一对数使它们的和为x-a[i]。 for(int i = 0; i &lt; N; i ++){ int j = i + 1, k = N - 1; while(j &lt; k){ int s = a[j]+a[k]+a[i]; if(s==x){ // find a new tuple break; }else if(s &lt; x){ j ++; }else{ k --; } } }  在双调数组（bitonic array）中找一个元素，要求时间复杂度$O(log n)$ $\Theta(3 log n)$算法  先找出双调数组中的最大值 ===&gt; $log n$次比较  int find_max(int* arr, int left, int right){ while(left + 1 &lt; right){ int mid = (left + right) / 2; if(arr[mid] &gt; arr[mid+1]){ right = mid; }else{ left = mid; } } return (arr[left] &gt; arr[right] ?
+          
+          ...<a class="button is-link" href="https://crazyxy.github.io/post/interesting-problems-from-coursera/" style="height:28px">
+            Read more
+            <span class="icon is-small">
+              <i class="fa fa-angle-double-right"></i>
+            </span>
+          </a>
+          
+        </div>
+      </article>
+      
+    </div>
+  </section>
+  <section class="section">
+  <div class="container">
+    <nav class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item">
+          
+          <a class="button is-disabled">
+            <span class="icon is-small is-marginless">
+              <i class="fa fa-angle-left"></i>
+            </span>
+            Newer
+          </a>
+          
+        </div>
+      </div>
+      <div class="level-right is-marginless">
+        <div class="level-item">
+          
+          <a class="button is-disabled">
+            Older
+            <span class="icon is-small is-marginless">
+              <i class="fa fa-angle-right"></i>
+            </span>
+          </a>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+</section>
+
+  <section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/crazyxy">Yan Xue</a> 2017</p>
+  </div>
+</section>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/cpp.min.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>

@@ -1,0 +1,27 @@
+baseurl = "https://crazyxy.github.io"
+languageCode = "en"
+title = "Yan"
+theme = "hemingway2"
+copyright = "&copy; <a href=\"https://github.com/crazyxy\">Yan Xue</a> 2017"
+disqusShortname = "crazyxy"
+googleAnalytics = ""
+description = "Your personal description"
+keywords = ["keyword1", "keyword2"]
+
+[taxonomies]
+tag = "tags"
+category = "categories"
+
+[params]
+
+[params.highlight]
+style = "github"
+languages = ["go", "cpp", "haskell"]
+
+[[params.social]]
+url = "https://github.com/crazyxy"
+fa_icon = "fa-github"
+
+[[params.social]]
+url = "/index.xml"
+fa_icon = "fa-rss"

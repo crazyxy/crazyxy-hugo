@@ -1,0 +1,176 @@
+<body>
+  <!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="" name="keywords">
+<meta content="Applicative Functors Deduction - Yan" property="og:title">
+<title>Applicative Functors Deduction | Yan</title>
+<link rel="stylesheet" href="https://crazyxy.github.io/css/style.css">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+  <section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://crazyxy.github.io/"><h1 class="title is-4">Yan</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/crazyxy">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="/index.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="subtitle is-6">July 18, 2017</h2>
+      <h1 class="title">Applicative Functors Deduction</h1>
+      
+      <div class="tags">
+    
+        <a class="button is-link" href="/tags/haskell">Haskell</a>
+    
+</div>
+
+      
+      <div class="content">
+        
+
+<h2 id="背景简介">背景简介</h2>
+
+<p>在Haskell中，Functor和Applicative Functor的定义如下：</p>
+
+<pre><code class="language-haskell">class Functor f where
+    fmap :: (a -&gt; b) -&gt; f a -&gt; f b
+
+class (Functor f) =&gt; Applicative f where
+    pure :: a -&gt; f a
+    &lt;*&gt;  :: f (a -&gt; b) -&gt; f a -&gt; f b
+</code></pre>
+
+<p>从上面的定义中可以看出，Functor和Applicative的instance都是type constructor，因为它需要吃一个类型<code>a</code>。许多type constructor都是Functor和Applicative的instance。例如<code>Maybe</code>，<code>[]</code>和<code>(-&gt;)r</code>。</p>
+
+<p>在上面三个类型中<code>(-&gt;)r</code>最为怪异。它是一个function，并且一个吃了一个类型，只需要另外一个类型便可以construct一个新的类型。<code>(-&gt;)r</code>的<code>fmap</code>，<code>pure</code>和<code>&lt;*&gt;</code>的实现如下：</p>
+
+<pre><code class="language-haskell">instance Functor ((-&gt;)r) where
+    fmap f g = \r -&gt; f (g r)
+</code></pre>
+
+<p><code>(-&gt;)r</code>的<code>fmap</code>函数实际上相当于<code>.</code>，因为<code>fmap</code>的类型为：</p>
+
+<pre><code class="language-haskell">fmap :: (a -&gt; b) -&gt; (r -&gt; a) -&gt; (r -&gt; b)
+</code></pre>
+
+<p>因此对于<code>(-&gt;)r</code>Functor，<code>fmap = .</code>。<code>(-&gt;)r</code>的<code>pure</code>和<code>&lt;*&gt;</code>的实现为：</p>
+
+<pre><code class="language-haskell">instance Applicative ((-&gt;)r) where
+    pure x = \_ -&gt; x
+    &lt;*&gt; f g = \r -&gt; f r (g r)
+</code></pre>
+
+<p>接下来解释下面表达式的求值与类型推导</p>
+
+<pre><code class="language-haskell">(+) &lt;$&gt; (+3) &lt;*&gt; (*100) $ 5
+</code></pre>
+
+<h2 id="求值">求值</h2>
+
+<pre><code class="language-haskell">  (+) &lt;$&gt; (+3) &lt;*&gt; (*100) $ 5
+= (\x -&gt; (+) (+ 3 x)) &lt;*&gt; (* 100) $ 5
+= (\y -&gt; (+) (+ 3 y) (* 100 y)) $ 5
+= (+) (+ 3 5) (* 100 5)
+= 508
+</code></pre>
+
+<h2 id="类型推导">类型推导</h2>
+
+<ul>
+<li>Step 1</li>
+</ul>
+
+<pre><code class="language-haskell">let a = (+) &lt;$&gt; (+3)
+</code></pre>
+
+<p><code>&lt;$&gt;</code>的类型是infix的<code>fmap</code>，因此<code>&lt;$&gt;</code>的两个参数类型分别为<code>(a-&gt;b)</code>和<code>f a</code>，结果为<code>f b</code>。在上面的表达式中第一个参数的类型为<code>Num a =&gt; a -&gt; a -&gt; a</code>，可以通过curry，将类型看成<code>Num a =&gt; a-&gt;(a-&gt;a)</code>。因此<code>a</code>的最终类型是<code>Num a =&gt; (-&gt;) a (a -&gt; a)</code>。</p>
+
+<ul>
+<li>Step 2</li>
+</ul>
+
+<pre><code class="language-haskell">let b = a &lt;*&gt; (*100)
+</code></pre>
+
+<p><code>&lt;*&gt;</code>的两边的参数类型分别是<code>f (a-&gt;b)</code>和<code>f a</code>。在<code>b</code>中，<code>&lt;*&gt;</code>左边表达式的类型是<code>Num a =&gt; (-&gt;) a (a-&gt;a)</code>，右边表达式的类型是<code>Num a =&gt; (-&gt;) a a</code>。因此<code>b</code>的类型为<code>Num a =&gt; (-&gt;) a a</code>。</p>
+
+<ul>
+<li>Step 3</li>
+</ul>
+
+<pre><code class="language-haskell">let c = b $ 5
+</code></pre>
+
+<p><code>b</code>的类型为<code>Num a =&gt; a -&gt; a</code>，因此<code>c</code>的类型为<code>int</code>。</p>
+
+      </div>
+    </div>
+  </section>
+  
+<section class="section">
+  <div class="container">
+    <aside><div id="disqus_thread"></div></aside>
+    <script type="text/javascript">
+      var disqus_shortname = 'crazyxy';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+  <section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/crazyxy">Yan Xue</a> 2017</p>
+  </div>
+</section>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/cpp.min.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>

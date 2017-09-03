@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Haskell on Yan</title>
+    <link>https://crazyxy.github.io/tags/haskell/</link>
+    <description>Recent content in Haskell on Yan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/crazyxy&#34;&gt;Yan Xue&lt;/a&gt; 2017</copyright>
+    <lastBuildDate>Tue, 18 Jul 2017 14:52:52 +0800</lastBuildDate>
+    
+	<atom:link href="https://crazyxy.github.io/tags/haskell/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Applicative Functors Deduction</title>
+      <link>https://crazyxy.github.io/post/applicative-functors-deduction/</link>
+      <pubDate>Tue, 18 Jul 2017 14:52:52 +0800</pubDate>
+      
+      <guid>https://crazyxy.github.io/post/applicative-functors-deduction/</guid>
+      <description>背景简介 在Haskell中，Functor和Applicative Functor的定义如下：
+class Functor f where fmap :: (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b class (Functor f) =&amp;gt; Applicative f where pure :: a -&amp;gt; f a &amp;lt;*&amp;gt; :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b  从上面的定义中可以看出，Functor和Applicative的instance都是type constructor，因为它需要吃一个类型a。许多type constructor都是Functor和Applicative的instance。例如Maybe，[]和(-&amp;gt;)r。
+在上面三个类型中(-&amp;gt;)r最为怪异。它是一个function，并且一个吃了一个类型，只需要另外一个类型便可以construct一个新的类型。(-&amp;gt;)r的fmap，pure和&amp;lt;*&amp;gt;的实现如下：
+instance Functor ((-&amp;gt;)r) where fmap f g = \r -&amp;gt; f (g r)  (-&amp;gt;)r的fmap函数实际上相当于.，因为fmap的类型为：
+fmap :: (a -&amp;gt; b) -&amp;gt; (r -&amp;gt; a) -&amp;gt; (r -&amp;gt; b)  因此对于(-&amp;gt;)rFunctor，fmap = .</description>
+    </item>
+    
+  </channel>
+</rss>
